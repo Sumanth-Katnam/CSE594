@@ -8,11 +8,17 @@ import avro
 from avro.datafile import DataFileWriter
 from avro.io import DatumWriter
 
+import subprocess
+import sys
+
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
 class Decode_Preprocess:
 
     def __init__(self): #initialization of important data attr. 
         self.ds_names_arr=[]
-        self.rootdirs=['D:/Work/PSU/Summer 2022/CSE 594/Smaller Sample']
+        self.rootdirs=['D:/Work/PSU/Summer 2022/CSE 594/Smaller Sample'] # Change to your path
 
     def decode_dimacsCNF(self, ds_name): #module to parse per file, for actual decoding 
         cnf_arr=[]
@@ -116,5 +122,6 @@ class Decode_Preprocess:
         self.decode_all() #all processes automated 
 
 if __name__=="__main__":
+    install('avro')
     dp=Decode_Preprocess()
     dp.complete_pre2process() #all methods called
