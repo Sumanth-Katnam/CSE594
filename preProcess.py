@@ -4,15 +4,18 @@ import os
 # import pyorc
 # from pyorc.enums import StructRepr
 import json
-import avro
-from avro.datafile import DataFileWriter
-from avro.io import DatumWriter
 
 import subprocess
 import sys
 
 def install(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+    import importlib
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+    except:
+        print("Couldn't install")
+    finally:
+        globals()[package] = importlib.import_module(package)
 
 class Decode_Preprocess:
 
@@ -100,7 +103,7 @@ class Decode_Preprocess:
         schema_parsed = avro.schema.parse(json.dumps(schema))
         
         with open(filename_txt, 'wb') as f:
-            writer = DataFileWriter(f, DatumWriter(), schema_parsed)
+            writer = avro.datafile.DataFileWriter(f, avro.io.DatumWriter(), schema_parsed)
             
             for i in range(len(self.ds_names_arr)):
                 cnf_problem, label_i = self.decode_dimacsCNF(self.ds_names_arr[i])
